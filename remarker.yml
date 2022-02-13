@@ -1,8 +1,8 @@
 dest: docs
 port: 30000
-title: Deno talk Nov 2021
+title: Devsumi 2022 Deno
 remarkConfig:
-  slideNumberFormat: 'Deno @ JSConf JP 2021 - %current% / %total%'
+  slideNumberFormat: 'Devsumi 2022 Deno - %current% / %total%'
 css: |
   body {
     font-family: 'Avenir Next', 'Hiragino Kaku Gothic ProN', 'Meiryo', 'メイリオ', sans-serif;

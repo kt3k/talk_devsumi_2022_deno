@@ -2,14 +2,21 @@ class: middle, center
 
 <img src="./assets/logo.svg" align="center" width="200" />
 
-Deno の これまで と これから
+モダンな JavaScript/TypeScript 実行環境 Deno
 
 ---
-アジェンダ
+class: middle, center
 
-- Deno とは
-- Deno のこれまでのロードマップ
-- Deno のこれからのロードマップ
+「Deno」
+
+聞いたことありますか? 🙋‍♀️ 🙋‍♂️
+
+---
+class: middle, center
+
+「Deno」
+
+使ったことありますか? 🙋‍♀️ 🙋‍♂️
 
 ---
 # 話す人
@@ -18,11 +25,39 @@ Deno の これまで と これから
 
 日野澤歓也 twitter @kt3k
 
+Web 開発者
+
 - GREE (2012 - 2013)
 - Recruit (2015 - 2019)
 - Deno Land (2021 -)
 
 <small>2018年から Deno にコントリビュートを開始。2020年作者に誘われ Deno Land に転職。現在はフルタイムで Deno と Deno Deploy を開発中。</small>
+
+---
+本日のアジェンダ
+
+- Node.js のおさらい
+- Deno とは
+- Deno の特徴
+
+おまけ
+
+- 自分が Deno 社に入社した経緯と入社後の話
+
+---
+class: middle center
+
+Node.js
+
+---
+Node.js
+
+- サーバーサイド JavaScript
+- 2009年に発表
+- C10K 問題への解としてサーバーサイドで流行
+- フロントエンド開発の基盤
+- Electron などのデスクトップアプリの基盤 (Slack, VSCode)
+- React Native などモバイルアプリ機能も充実
 
 ---
 class: middle center
@@ -32,7 +67,7 @@ Deno とは
 ---
 class: inverse middle center
 
-今から3年前
+今から3年半前
 
 ---
 class: inverse middle center
@@ -96,14 +131,14 @@ class: middle center
 
 ---
 class: middle center
-Deno のこれまで
+Deno の特徴
 
 ---
-Deno のこれまでのロードマップ
+Deno の特徴
 - Web 互換性
 - TypeScript サポート
 - V8 サンドボックスセキュリティの活用
-- HTTPパフォーマンス
+- 開発用コマンドのビルトインサポート
 
 ---
 class: inverse middle center
@@ -157,7 +192,6 @@ Web 互換性 - 最近の進捗 - MDN
 <p class="text-align: center">
   <img src="./assets/mdn.png" width="600" />
 </p>
-
 
 ---
 class: inverse middle center
@@ -304,15 +338,6 @@ Deno の採用例 - GitHub
 </p>
 
 ---
-Deno の採用例 - Jake Archibald
-
-<p style="text-align: center">
-  <a href="https://twitter.com/jaffathecake/status/1447900413609529347">
-    <img src="./assets/cors-playground.png" width="500" />
-  </a>
-</p>
-
----
 Deno の採用例 - Slack
 
 <p style="text-align: center">
@@ -323,150 +348,139 @@ Deno の採用例 - Slack
 
 ---
 class: inverse middle center
-Deno のこれから
+
+疑問: Deno は今すぐ使って良い技術なのか?
 
 ---
-これからロードマップ
-
-- 大まかな方向性には大きな変更は無し。
-- Web 互換性、TypeScript サポート、セキュリティには引き続き注力
+Q. Deno は今すぐ使って良い技術なのか?
 
 ---
-class: inverse middle center
+Q. Deno は今すぐ使って良い技術なのか?
 
-2021年10月<br />
-大きめのロードマップが追加
-
----
-class: middle center
-
-<img src="./assets/node-compat.png" width="750" />
+A. やりたいタスクによる
 
 ---
-class: inverse middle center
+Q. Deno は今すぐ使って良い技術なのか?
 
-Node.js 互換性
+A. やりたいタスクによる
 
----
-class: inverse middle center
-
-デモ
+- 簡単なスクリプティング -> ✅ OK
 
 ---
-Node.js 互換性をなぜやるか
+Q. Deno は今すぐ使って良い技術なのか?
 
-- Deno は自体は良く出来ているが、Node.js と違いすぎるため使えないという意見が多い
-- 実際 Deno の新規インストール数は、横ばい気味
-- Node.js 互換性を導入すればユーザー数が増える可能性がある
-- Node.js と互換性がないのは意図的なデザインであったはず・・・
+A. やりたいタスクによる
 
-
----
-Node.js 互換性をなぜやるか
-
-- Deno は自体は良く出来ているが、Node.js と違いすぎるため使えないという意見が多い
-- 実際 Deno の新規インストール数は、横ばい気味
-- Node.js 互換性を導入すればユーザー数が増える可能性がある
-- Node.js と互換性がないのは意図的なデザインであったはず・・・
-
-Node.js 互換性を巡って社内・コミュニティ内でも混乱状態に
+- そこまで複雑ではない Web アプリ -> ✅ OK
+  - oak というウェブフレームワークが定番
+- 例えば、特定の express middleware (e.g. passport) に依存した Web アプリ -> ❌ NG
+  - express 自体は Deno では動かないため
 
 ---
+Q. Deno は今すぐ使って良い技術なのか?
 
-class: middle
+A. やりたいタスクによる
 
-<p style="text-align: center">
-  <img src="./assets/joel.png" width="800" />
-</p>
-
----
-class: middle center
-
-<a href="https://www.joelonsoftware.com/2000/05/24/strategy-letter-ii-chicken-and-egg-problems/">
-プラットフォームビジネスの<br />Chicken and Egg problem
-</a>
-
-by Joel Spolsky
+- そこまで複雑ではない フロントエンド -> ✅ OK
+  - aleph (next.js 相当), packup (parcel 相当) などのツールがあります
+- 特定の webpack loader に依存したフロントエンド開発 -> ❌ NG
+  - webpack 自体は Deno では動かないため
 
 ---
-Chicken and Egg problem
+Q. Deno は今すぐ使って良い技術なのか?
 
-- ある新しいプラットフォームを構築したい場合に
-  - ユーザーが少なければ、そのプラットフォームで動くソフトは増えない
-  - ソフトが少なければ、そのプラットフォームを使うユーザーは増えない
-
----
-Chicken and Egg problem
-
-- ユーザーが増えればソフトが増える
-- ソフトが増えればユーザーが増える
-- どっちが先に増える?
+- 普通の言語に備わっているべきベーシックな機能はほとんど揃っています。
+- また、一般的に必要になるライブラリ・フレームワーク類もかなり充実してきています。
 
 ---
-Chicken and Egg problem
+Q. Deno は今すぐ使って良い技術なのか?
 
-- ユーザーが増えればソフトが増える
-- ソフトが増えればユーザーが増える
-- どっちが先に増える?
-
-=> そのままではどちらも急には増えない
+- 普通の言語でできる事が期待される事は Deno でも出来ると思って良いと言える状態になってきている。
+- ただし、特定の npm モジュールに強く依存した作業の場合は、そのモジュールが使えない事がネックになる可能性があります。
 
 ---
-Chicken and Egg problem
+class: middle, center
 
-- ユーザーが増えればソフトが増える
-- ソフトが増えればユーザーが増える
-- どっちが先に増える?
+<img src="./assets/logo.svg" align="center" width="200" />
 
-=> そのままではどちらも急には増えない
-
-=> この状況に陥ったまま消えたプラットフォームは多い
----
-Chicken and Egg problem
-
-- ユーザーが増えればソフトが増える
-- ソフトが増えればユーザーが増える
-- どっちが先に増える?
-
-=> そのままではどちらも急には増えない
-
-=> この状況に陥ったまま消えたプラットフォームは多い
-
-=> まさに Deno が今直面している状況 (と Deno チームは考えました)
-
----
-Chicken and Egg problem
-
-- この問題を解決する方法が、前プラットフォームとの互換性をとること
-- 例. Windows 3.x
-  - Windows 1.0, 2.0 は流行らなかった
-  - 3.0 で DOS platform との互換性をとったため、使えるソフトが一気に増えて流行った
-- 例. Windows 95
-  - Windows 3.x 系との互換性に異常に拘って実装
-  - 結果最初から使えるソフトが多かった
-
----
-Chicken and Egg problem
-
-- Node.js 互換性で Chicken and Egg problem を解決できるのではないか?
-
----
-Node.js 互換性
-
-- Deno は Node.js 互換性を実現して既存 Node.js ユーザーの取り込みを目指しています
-- 2022年Q2リリース予定
-
----
-class: middle center
-
-まとめ
+Deno 自体の話はここまで
 
 ---
 まとめ
 
 - Deno は "改良版" Node.js を目指すプロジェクト
-- Deno はこれまで Web 互換性、セキュリティ、TypeScript サポートに力を入れてきて、一定の成果をあげた
-- Deno はこれから Node.js 互換性に力を入れる
+- Deno は Web 互換性、セキュリティ、TypeScript サポートに力を入れてきて、一定の成果をあげた
+- Deno は今使い出しても問題ないが、自分が必要とするライブラリがあるかどうかのチェックが必要
+
+---
+class: middle, center
+
+Deno 社に入社するまでと入社してからの話
+
+---
+
+入社するまでのコントリビューション 2018 - 2020
+
+- 純粋に技術的に面白そうという理由で開発に参加
+- この時点ではそもそも会社が存在していなかったし、会社になる気配も無かった
+
+=> 純粋に contribute していた時代
+
+---
+
+2020年中盤 Deno Land Inc. 設立
+
+- US の登記情報のようなサイトが検索で引っかかる
+- Node.js contributor の一人が Deno Land Inc. に入ると issue 上でコメント
+- ただし公式アナウンスは無し
+
+---
+メール
+
+- 2020/10 作者ライアン・ダールから「ちょっと個人的に話さない?」という内容のメールがくる。
+- この時点ではライアン・ダールと個人的な連絡を取った経験はなし。PR 上でのやり取りのみの関係。
+
+---
+面接
+
+- Meet で会ってみると、やはり Deno で働かないかという話だった。
+- 面白そうと思ったのでその場でオファーを承諾。その後 CTO とも面接し、2021/1 から稼働開始 (リモート)
+
+---
+入社後
+
+- まず、個人にタスクをアサインする事はないと告げられる。
+- 各人が Deno にとって良いと思った事をする。
+- 自由で良い反面、なぜその作業が Deno にとって良いのかという理由づけを常に説明できる必要がある
+
+=> Great power comes with great responsibility
+
+---
+Deno 社で大変な事
+
+- タスクを考える事が大変
+- 何が Deno にとって良いのか、という本質を常に考える必要がある
+- なおかつ他のメンバーとの対比で自分のバリューを発揮しやすいタスクを見つける事が必要
+
+=> 最近は個人としては、標準ライブラリ、PaaS 開発を中心に作業
+
+---
+Deno 社で大変な事
+
+- chat の消化、github 通知の消化
+- すごい量の英語を読まないといけない
+  - => いまだに未解決問題
+
+---
+Deno での1年
+
+- 初めての英語環境での就業
+- 仕事としての OSS 開発
+- 世界レベルで有名な人との協業
+- Web 開発スキルは普通に通用すると実感
+- 周辺業務領域への気づき
+
+=> ものすごく挑戦のある環境
 
 ---
 class: middle center
