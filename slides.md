@@ -36,28 +36,12 @@ Web 開発者
 ---
 本日のアジェンダ
 
-- Node.js のおさらい
 - Deno とは
 - Deno の特徴
 
 おまけ
 
 - 自分が Deno 社に入社した経緯と入社後の話
-
----
-class: middle center
-
-Node.js
-
----
-Node.js
-
-- サーバーサイド JavaScript
-- 2009年に発表
-- C10K 問題への解としてサーバーサイドで流行
-- フロントエンド開発の基盤
-- Electron などのデスクトップアプリの基盤 (Slack, VSCode)
-- React Native などモバイルアプリ機能も充実
 
 ---
 class: middle center
@@ -82,7 +66,7 @@ JSConf EU 2018
 ---
 「Node.js について後悔している10の事」
 
-- Node.js の作者 Ryan Dahl が Node.js の現状のデザインについて、今の視点からみて後悔している7つの事を発表
+- Node.js の作者 Ryan Dahl が Node.js の現状のデザインについて、今の視点からみて後悔している事を発表
 - それを克服する新しい処理系として Deno プロジェクトを提案
 
 <p style="text-align: center">
@@ -90,26 +74,61 @@ JSConf EU 2018
 </p>
 
 ---
-7つの後悔
+Node.js のおさらい
+
+- サーバーサイド JavaScript
+- V8 エンジンベース
+- 2009年に発表
+- C10K 問題への解としてサーバーサイドで流行
+- フロントエンド開発の基盤
+- Electron などのデスクトップアプリの基盤 (Slack, VSCode)
+- React Native などモバイルアプリ機能も充実
+
+--
+
+=> あらゆる場面で活用される巨大プラットフォーム
+
+---
+Node.js 7つの後悔
 
 - 後悔1: Promise を使わなかった
+--
+
 - 後悔2: Security Sandbox を使わなかった
+--
+
 - 後悔3: GYP を使い続けてしまった
+--
+
 - 後悔4: package.json
 - 後悔5: node_modules
+--
+
 - 後悔6: モジュール解決時の拡張子省略
 - 後悔7: index.js
+--
+
 
 Node.js の「あたりまえ」を否定
 
 ---
 対案としての Deno 、そのゴール
 
-1. セキュリティ
-2. ES Module
+1. セキュリティの強化
+--
+
+2. ES Module だけを使う
+--
+
 3. TypeScript ビルトイン
+--
+
 4. 単体の実行ファイルで動く
+--
+
 5. モダンな開発環境を使う
+--
+
 6. 可能な限り Web 互換
 
 などの目標が掲げられた
@@ -118,11 +137,10 @@ Node.js の「あたりまえ」を否定
 class: middle center
 
 Deno とは
+--
 
----
-class: middle center
 
-Deno とは "改良版" Node.js
+"改良版" Node.js
 
 ---
 class: middle center
@@ -137,8 +155,8 @@ Deno の特徴
 Deno の特徴
 - Web 互換性
 - TypeScript サポート
-- V8 サンドボックスセキュリティの活用
-- 開発用コマンドのビルトインサポート
+- サンドボックスセキュリティ
+- ビルトイン開発ツール
 
 ---
 class: inverse middle center
@@ -148,36 +166,135 @@ Web 互換性
 ---
 Web 互換性
 
-- Deno には可能な限り Web 互換 API を取り入れるというデザイン方針がある
-- サーバーサイドでも意味がある Web API を出来るだけ取り入れる
+- Deno には可能な限りブラウザ互換 API を取り入れるというデザイン方針がある
+- サーバーサイドで意味があるブラウザ API はできるだけ実装する
 
 ---
 Web 互換性
 
+- Node.js では、開発が始まった当初(約10年前)はブラウザ API 自体が現在と比べて非常に限られていたという事情があり、様々な機能が独自 API として実装されている
+--
+
+- ただし、Node.js も可能な場合は後からブラウザ互換 API を取り入れるという流れがあり、ややこしい状態になっている
+  - 例. url と URL、Buffer extends Uint8Array
+
+---
+Deno に実装されている ブラウザ互換API の例
+
+`fetch` API
+
+```ts
+const resp = await fetch("https://example.com");
+const html = await resp.text();
+console.log(html);
+```
+
+--
+
+- 簡単に HTTP リクエストが出来る
+- http client library などが不要
+
+---
+Deno に実装されている ブラウザ互換API の例
+
+バイナリ処理 - TypedArray API (Uint8Array, etc)
+
+```ts
+const data = Uint8Array.from([0x66, 0x6f, 0x6f]);
+const text = new TextDecoder().decode(data);
+// => foo
+```
+
+--
+- <small>Node の場合は `Buffer` (独自クラス)</small>
+
+--
+- <small>ただし今は TypedArray も持っている</small>
+
+---
+Deno に実装されている ブラウザ互換API の例
+
+URL パーサー
+
+```ts
+const url = new URL("https://example.com/?foo=bar");
+console.log(url.hostname); // => example.com
+console.log(url.searchParams.get("foo")); // => bar
+```
+
+--
+- <small>Node の場合は require("url") が昔からあるが、後に URL も実装されて両方ある状態</small>
+
+---
+Deno に実装されている ブラウザ互換API の例
+
+Web Storage
+
+```ts
+localStorage.setItem("key", data);
+...
+// プログラム再起動後
+console.log(localStorage.getItem("key"));
+// => さっき保存したデータが残っている
+```
+
+--
+- エントリポイント毎に独立したストレージを持てる
+- 内部では SQLite を使って保存している
+
+--
+- <small>Node には無い機能</small>
+
+---
+Deno に実装されている ブラウザ互換API の例
+
+HTTP imports
+
+```ts
+import { serve }
+  from "https://deno.land/std@0.126.0/http/server.ts";
+
+serve((_req) => new Response("Hello, world"));
+```
+
+--
+- URL 指定でモジュールを取得できる。
+- この機能があるため Deno では `package.json` や `node_modules` が不要になっている
+
+--
+- <small>Node でも最近実験的な実装が始まったが物議を醸している</small>
+
+---
 Deno に実装されている Web API の例
 
-- http client - fetch API
-- バイナリ処理 - TypedArray API (Uint8Array, etc)
-- ストリーミング処理 - Web Stream API
-- URL parse - URL API
 - PubSub - EventTarget API
-
----
-Web 互換性
-
-Deno に実装されている Web API の例
-
+- ストリーミング処理 - Web Stream API
 - 暗号 - Web Crypto API
 - GPU - WebGPU
 - http server - Request, Response API
-- データ保存 - Web Storage API
+
+参考: [A list of every web API in Deno](https://deno.com/blog/every-web-api-in-deno)
+
+---
+Web 互換 API の良いところ
+
+- ブラウザと共通して使えるコードを書ける
+- ブラウザ API はとてもきちんと定義されている
+  - 議論の質が高い
+  - 仕様書の質が高い
+  - 自動テストがある
+- 仕様策定プロセスがあるため、簡単に変わることはない
+
+--
+
+=> 安心して使える
 
 ---
 Web 互換性 - 最近の進捗 - WPT
 
 - 2021年1月 Web Platform テストを CI に導入
 - Web Platform Test = ブラウザが共通で通している Web API のテストスイート
-- コミット毎に Web 互換性をチェックするように
+- コミット毎に Web 互換性をチェックしています
 
 <p class="text-align: center">
 <a href="https://wpt.fyi/results/?label=master&product=chrome%5Bexperimental%5D&product=edge%5Bexperimental%5D&product=firefox%5Bexperimental%5D&product=safari%5Bexperimental%5D&product=deno&aligned">
@@ -209,6 +326,8 @@ const res = await fetch("https://example.com")
 console.log(res.body.text);
 ```
 
+--
+
 ```
 $ deno run sample.ts  
 Check file:///Users/kt3k/sample.ts
@@ -217,13 +336,13 @@ console.log(res.body.text);
             ~~~~~~~~
 ```
 
-↑ 実行時エラーではなく型エラー
+↑ 実行時エラーではなく型エラー、より早期にエラーを発見できる
 
 ---
-TypeScript サポート - 最近の進捗
+TypeScript サポート `deno lsp`
 
 - 2020年8月 `deno lsp` コマンドの導入
-- VSCode とシームレスな連携 & Deno 固有な型情報の補完が出来るように
+- Language Server Protocol でエディタと通信して、Deno 固有な型情報の補完が出来るように
 
 <p class="text-align: center">
   <img src="./assets/deno-vscode.png" width="600" />
@@ -237,6 +356,16 @@ TypeScript サポート `deno lsp`
 <p class="text-align: center">
   <img src="./assets/deno-lsp-network.png" width="600" />
 </p>
+
+---
+TypeScript サポート 補足
+
+- <small>なお、ベストプラクティスと考えられている設定がデフォルトで入っているので、設定無しで TypeScript を使い始められます。</small>
+- <small>デフォルトから外れたい場合は、自分でコンパイラオプションを書くこともできます。</small>
+
+--
+
+=> <small>TypeScript を使うための敷居が Node.js に比べてかなり低い(はず)</small>
 
 ---
 class: inverse middle center
@@ -280,11 +409,22 @@ class: inverse middle center
 ---
 サンドボックスセキュリティ
 
-各セキュリティに範囲指定が実装されています
+ファイルの読み取りを許可する場合 (全部許可)
+```
+deno run --allow-read program.ts
+```
 
 カレントディレクトリのみ読み込み許可
 ```
 deno run --allow-read=. program.ts
+```
+
+---
+サンドボックスセキュリティ
+
+ファイルの書き込みを許可する場合 (全部許可)
+```
+deno run --allow-write program.ts
 ```
 
 `dist/` ディレクトリのみ書き込み許可
@@ -296,30 +436,106 @@ deno run --allow-write=dist/ program.ts
 ---
 サンドボックスセキュリティ
 
-特定のドメイン・ポートのみネットワークアクセス許可
+<small>ネットワークアクセスを許可する場合 (全部許可)</small>
+```
+deno run --allow-net program.ts
+```
+
+<small>特定のドメイン・ポートのみネットワークアクセス許可</small>
 
 ```
 deno run --allow-net=example.com:80 program.ts
 ```
 
-※攻撃コードが混入してしまった時に威力を発揮
+--
+
+<small>=> 意図しない攻撃コード混入時などに被害を防ぐ事が出来る</small>
 
 ---
-サンドボックスセキュリティ - 最近の進捗
+サンドボックスセキュリティ
 
-AWS のクレデンシャルの環境変数のみ使用許可
+その他のパーミッション
 
-```
-deno run \
-  --allow-env=AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY \
-  program.ts
-```
+- `--allow-env` 環境変数の使用許可
+- `--allow-run` 別プロセス実行の使用許可
+- `--allow-ffi` 外部ネイティブ拡張使用許可 (Deno のセキュリティモデルを無視したコードが実行されるため、使用注意)
+- `--allow-hrtimes` 高精度タイマー使用許可・スペクター対策 (基本許可しない)
 
-git コマンドだけ使用許可
+---
+サンドボックスセキュリティ余談
 
-```
-deno run --allow-run=git program.ts
-```
+- ところで、npm では恒常的にセキュリティインシデントが起きている
+- その大部分は、Deno の場合はセキュリティフラグを正しく使う事で回避出来る
+- Node.js に今からこの機能を入れる事は現実的ではない
+- Deno が Node.js を本質的に"改善"している機能と言える
+
+---
+class: middle center
+
+ビルトイン開発ツール
+
+---
+最近の Node.js 開発の始め方
+
+--
+
+- TypeScript のインストール
+--
+
+- ESLint のインストール
+--
+
+- Prettier のインストール
+--
+
+- Jest のインストール
+--
+
+- テストカバレッジツールのインストール 😩
+--
+
+- バンドラーのインストール 😫
+
+
+--
+
+=> <small>最初からインストールしないといけないものが多い!</small>
+
+--
+
+=> <small>しかも時間が経つと「それはもう古い」になりがち!</small>
+
+---
+Deno のビルトイン開発ツール
+
+- 開発時に常識的に必要になる機能は本体にビルトインされている
+
+---
+Deno のビルトイン開発ツール
+
+- 例
+--
+
+  - コードのフォーマット => `deno fmt`
+--
+
+  - コードのリント => `deno lint`
+--
+
+  - ユニットテストの実行 => `deno test`
+--
+
+  - テストカバレッジ => `deno coverage`
+--
+
+  - スクリプトのバンドル => `deno bundle`
+--
+
+  - TypeScript => 本体に内包
+--
+
+
+=> Deno 本体さえあれば、開発に必要なツールが一通り揃っている!
 
 ---
 class: middle center
@@ -347,73 +563,22 @@ Deno の採用例 - Slack
 </p>
 
 ---
-class: inverse middle center
+Deno の採用例 - Slack
 
-疑問: Deno は今すぐ使って良い技術なのか?
-
----
-Q. Deno は今すぐ使って良い技術なのか?
-
----
-Q. Deno は今すぐ使って良い技術なのか?
-
-A. やりたいタスクによる
-
----
-Q. Deno は今すぐ使って良い技術なのか?
-
-A. やりたいタスクによる
-
-- 簡単なスクリプティング -> ✅ OK
-
----
-Q. Deno は今すぐ使って良い技術なのか?
-
-A. やりたいタスクによる
-
-- そこまで複雑ではない Web アプリ -> ✅ OK
-  - oak というウェブフレームワークが定番
-- 例えば、特定の express middleware (e.g. passport) に依存した Web アプリ -> ❌ NG
-  - express 自体は Deno では動かないため
-
----
-Q. Deno は今すぐ使って良い技術なのか?
-
-A. やりたいタスクによる
-
-- そこまで複雑ではない フロントエンド -> ✅ OK
-  - aleph (next.js 相当), packup (parcel 相当) などのツールがあります
-- 特定の webpack loader に依存したフロントエンド開発 -> ❌ NG
-  - webpack 自体は Deno では動かないため
-
----
-Q. Deno は今すぐ使って良い技術なのか?
-
-- 普通の言語に備わっているべきベーシックな機能はほとんど揃っています。
-- また、一般的に必要になるライブラリ・フレームワーク類もかなり充実してきています。
-
----
-Q. Deno は今すぐ使って良い技術なのか?
-
-- 普通の言語でできる事が期待される事は Deno でも出来ると思って良いと言える状態になってきている。
-- ただし、特定の npm モジュールに強く依存した作業の場合は、そのモジュールが使えない事がネックになる可能性があります。
-
----
-class: middle, center
-
-<img src="./assets/logo.svg" align="center" width="200" />
-
-Deno 自体の話はここまで
+- Slack の新しい SDK は Deno ベース
+- この件以降、各種スタートアップから Deno 社への問い合わせがかなり増えている
 
 ---
 まとめ
 
 - Deno は "改良版" Node.js を目指すプロジェクト
-- Deno は Web 互換性、セキュリティ、TypeScript サポートに力を入れてきて、一定の成果をあげた
-- Deno は今使い出しても問題ないが、自分が必要とするライブラリがあるかどうかのチェックが必要
+- Deno は Web 互換性、セキュリティ、TypeScript サポート、ビルトイン開発ツールなどが特徴的でそれらの機能はかなり充実・安定してきている
+- Deno は GitHub、Slack などから採用が始まっている
 
 ---
 class: middle, center
+
+おまけ
 
 Deno 社に入社するまでと入社してからの話
 
@@ -422,9 +587,14 @@ Deno 社に入社するまでと入社してからの話
 入社するまでのコントリビューション 2018 - 2020
 
 - 純粋に技術的に面白そうという理由で開発に参加
-- この時点ではそもそも会社が存在していなかったし、会社になる気配も無かった
+- この時点では会社は存在していなかった
+- 外部コントリビュータとしては 3 番目ぐらいに contribute していた
 
-=> 純粋に contribute していた時代
+<p style="text-align: center">
+  <a href="https://youtu.be/1gIiZfSbEAE?t=1794" target="_blank">
+    <img src="./assets/tsconf-collaborators.png" align="center" width="500" />
+  </a>
+</p>
 
 ---
 
@@ -443,44 +613,43 @@ Deno 社に入社するまでと入社してからの話
 ---
 面接
 
-- Meet で会ってみると、やはり Deno で働かないかという話だった。
-- 面白そうと思ったのでその場でオファーを承諾。その後 CTO とも面接し、2021/1 から稼働開始 (リモート)
+- Meet で会ってみると、Deno の会社をやっている。Deno で働かないか、という話だった
+- 面白そうと思ったのでその場でオファーを承諾。その後 CTO とも面談し、2021/1 から稼働開始
 
 ---
 入社後
 
 - まず、個人にタスクをアサインする事はないと告げられる。
 - 各人が Deno にとって良いと思った事をする。
-- 自由で良い反面、なぜその作業が Deno にとって良いのかという理由づけを常に説明できる必要がある
-
-=> Great power comes with great responsibility
-
----
-Deno 社で大変な事
-
-- タスクを考える事が大変
-- 何が Deno にとって良いのか、という本質を常に考える必要がある
-- なおかつ他のメンバーとの対比で自分のバリューを発揮しやすいタスクを見つける事が必要
-
-=> 最近は個人としては、標準ライブラリ、PaaS 開発を中心に作業
+- と言っても、自分が得意な分野には限りがあるため、バリューが出せそうな領域を見つけて取り組む
+- 取り組むタスク探しはいつも難しい問題
 
 ---
-Deno 社で大変な事
-
-- chat の消化、github 通知の消化
-- すごい量の英語を読まないといけない
-  - => いまだに未解決問題
-
----
-Deno での1年
+Deno での1年の振り返り
 
 - 初めての英語環境での就業
-- 仕事としての OSS 開発
+- 初めての仕事としての OSS 開発
 - 世界レベルで有名な人との協業
-- Web 開発スキルは普通に通用すると実感
-- 周辺業務領域への気づき
 
-=> ものすごく挑戦のある環境
+--
+
+=> ものすごく挑戦があり、ほぼ良いことづくめの環境
+
+--
+
+=> ただし周りが非常に優秀なためプレッシャーもある
+
+---
+class: middle center
+<small>Findy Engineer Lab にインタビュー記事が出ました!</small>
+
+<p style="text-align: center">
+  <a href="https://engineer-lab.findy-code.io/deno-kt3k" target="_blank">
+    <img src="./assets/findy-article.png" align="center" width="500" />
+  </a>
+</p>
+
+<small>もう少し詳しい入社前後の経緯が載っています</small>
 
 ---
 class: middle center
