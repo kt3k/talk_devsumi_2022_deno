@@ -19,6 +19,15 @@ class: middle, center
 使ったことありますか? 🙋‍♀️ 🙋‍♂️
 
 ---
+class: middle, center
+
+今日は Deno を
+
+「聞いた事ない」 ~ 「触った事はある」
+
+ぐらいの人向けの話をします
+
+---
 # 話す人
 
 <img src="./assets/hinosawa.jpg" align="right" width="300" />
@@ -78,10 +87,16 @@ Node.js のおさらい
 
 - サーバーサイド JavaScript
 - V8 エンジンベース
-- 2009年に発表
+- 2009年に開発開始
 - C10K 問題への解としてサーバーサイドで流行
-- フロントエンド開発の基盤
+
+--
+- フロントエンド開発の基盤にもなった
+
+--
 - Electron などのデスクトップアプリの基盤 (Slack, VSCode)
+
+--
 - React Native などモバイルアプリ機能も充実
 
 --
@@ -92,18 +107,10 @@ Node.js のおさらい
 Node.js 7つの後悔
 
 - 後悔1: Promise を使わなかった
---
-
-- 後悔2: Security Sandbox を使わなかった
---
-
+- 後悔2: Security Sandbox を活用しなかった
 - 後悔3: GYP を使い続けてしまった
---
-
 - 後悔4: package.json
 - 後悔5: node_modules
---
-
 - 後悔6: モジュール解決時の拡張子省略
 - 後悔7: index.js
 --
@@ -115,21 +122,11 @@ Node.js の「あたりまえ」を否定
 対案としての Deno 、そのゴール
 
 1. セキュリティの強化
---
-
 2. ES Module だけを使う
---
-
 3. TypeScript ビルトイン
---
-
 4. 単体の実行ファイルで動く
---
-
 5. モダンな開発環境を使う
---
-
-6. 可能な限り Web 互換
+6. 可能な限りブラウザ互換にする
 
 などの目標が掲げられた
 
@@ -145,7 +142,7 @@ Deno とは
 ---
 class: middle center
 
-<img src="./assets/node-sort-deno-tweet.png" align="center" width="600" />
+<img src="./assets/node-sort-deno-tweet.png" align="center" width="700" />
 
 ---
 class: middle center
@@ -153,7 +150,7 @@ Deno の特徴
 
 ---
 Deno の特徴
-- Web 互換性
+- ブラウザ互換性
 - TypeScript サポート
 - サンドボックスセキュリティ
 - ビルトイン開発ツール
@@ -161,21 +158,16 @@ Deno の特徴
 ---
 class: inverse middle center
 
-Web 互換性
+ブラウザ互換性
 
 ---
-Web 互換性
+ブラウザ互換性
 
 - Deno には可能な限りブラウザ互換 API を取り入れるというデザイン方針がある
-- サーバーサイドで意味があるブラウザ API はできるだけ実装する
-
----
-Web 互換性
-
-- Node.js では、開発が始まった当初(約10年前)はブラウザ API 自体が現在と比べて非常に限られていたという事情があり、様々な機能が独自 API として実装されている
+- Node の開発が始まった時に比べてかなり多くのブラウザ API が定義されていて、いろいろな事がブラウザと同じ API で出来るようになっている
 --
 
-- ただし、Node.js も可能な場合は後からブラウザ互換 API を取り入れるという流れがあり、ややこしい状態になっている
+- <small>ただし、Node.js も可能な場合は後からブラウザ互換 API を取り入れるという流れがあり、ややこしい状態になっている</small>
   - 例. url と URL、Buffer extends Uint8Array
 
 ---
@@ -207,9 +199,7 @@ const text = new TextDecoder().decode(data);
 
 --
 - <small>Node の場合は `Buffer` (独自クラス)</small>
-
---
-- <small>ただし今は TypedArray も持っている</small>
+- <small>ただし今は Node は TypedArray も持っている</small>
 
 ---
 Deno に実装されている ブラウザ互換API の例
@@ -265,7 +255,7 @@ serve((_req) => new Response("Hello, world"));
 - <small>Node でも最近実験的な実装が始まったが物議を醸している</small>
 
 ---
-Deno に実装されている Web API の例
+Deno に実装されているブラウザAPI の例
 
 - PubSub - EventTarget API
 - ストリーミング処理 - Web Stream API
@@ -276,7 +266,7 @@ Deno に実装されている Web API の例
 参考: [A list of every web API in Deno](https://deno.com/blog/every-web-api-in-deno)
 
 ---
-Web 互換 API の良いところ
+ブラウザ互換 API の良いところ
 
 - ブラウザと共通して使えるコードを書ける
 - ブラウザ API はとてもきちんと定義されている
@@ -290,7 +280,7 @@ Web 互換 API の良いところ
 => 安心して使える
 
 ---
-Web 互換性 - 最近の進捗 - WPT
+ブラウザ互換性 - 最近の進捗 - WPT
 
 - 2021年1月 Web Platform テストを CI に導入
 - Web Platform Test = ブラウザが共通で通している Web API のテストスイート
@@ -318,7 +308,7 @@ TypeScript サポート
 ---
 TypeScript サポート
 
-- TypeScript をそのまま実行できる。
+- TypeScript をそのまま実行できる
 
 ```ts
 // sample.ts
@@ -336,12 +326,11 @@ console.log(res.body.text);
             ~~~~~~~~
 ```
 
-↑ 実行時エラーではなく型エラー、より早期にエラーを発見できる
+↑ 実行時エラーではなく型エラー
 
 ---
 TypeScript サポート `deno lsp`
 
-- 2020年8月 `deno lsp` コマンドの導入
 - Language Server Protocol でエディタと通信して、Deno 固有な型情報の補完が出来るように
 
 <p class="text-align: center">
@@ -378,7 +367,7 @@ class: inverse middle center
 前提の話
 
 - Deno は内部的に V8 エンジンを使っている。
-- ブラウザ上で JavaScript を安全に実行するため、V8 エンジンの実行環境は厳格にサンドボックス化されている。
+- V8 は「信用できないコード」を動かす事を前提に設計されているため、サンドボックス化されている
 - => V8 の外に影響を及ぼせないようになっている
 
 ---
@@ -460,6 +449,7 @@ deno run --allow-net=example.com:80 program.ts
 - `--allow-run` 別プロセス実行の使用許可
 - `--allow-ffi` 外部ネイティブ拡張使用許可 (Deno のセキュリティモデルを無視したコードが実行されるため、使用注意)
 - `--allow-hrtimes` 高精度タイマー使用許可・スペクター対策 (基本許可しない)
+- `--allow-all, -A` 全部許可、開発時などに利用
 
 ---
 サンドボックスセキュリティ余談
@@ -470,7 +460,7 @@ deno run --allow-net=example.com:80 program.ts
 - Deno が Node.js を本質的に"改善"している機能と言える
 
 ---
-class: middle center
+class: middle center inverse
 
 ビルトイン開発ツール
 
