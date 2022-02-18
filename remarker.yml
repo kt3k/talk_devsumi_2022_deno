@@ -1,6 +1,6 @@
 dest: docs
 port: 30000
-title: Devsumi 2022 Deno
+title: モダンなJavaScript/TypeScript実行環境「Deno」
 remarkConfig:
   slideNumberFormat: 'Devsumi 2022 Deno - %current% / %total%'
 css: |
